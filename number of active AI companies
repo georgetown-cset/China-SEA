@@ -1,0 +1,27 @@
+select 
+    country_code ,
+    count(distinct uuid) as num_companies,
+from gcp_cset_crunchbase.organizations
+cross join unnest (category_list_split) as categories
+--ai fx for keywords 
+where (cat_data.isAI(short_description) is true 
+    or categories like '%Artificial Intelligence%')
+    --only companies thru 2021
+    and founded_on < "2022-01-01" #without this  61449 as of 2-10-2022
+    --only active companies
+    and closed_on is null AND
+(country_code = "SGP" or
+country_code = "BRN"
+      OR country_code = "MMR"
+      OR country_code = "KHM"
+      OR country_code = "TLS"
+      OR country_code = "IDN"
+      OR country_code = "LAO"
+      OR country_code = "MYS"
+      OR country_code = "PHL"
+      OR country_code = "SGP"
+      OR country_code = "THA"
+      OR country_code = "VNM"
+      OR country_code ="LKA")
+group by country_code 
+order by num_companies desc
