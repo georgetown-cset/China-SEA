@@ -5,7 +5,7 @@ WITH
   SELECT
     * EXCEPT(short_description,
       description),
-    CONCAT(short_description,' ', description) AS description
+    CONCAT(coalesce(short_description, ''),' ', coalesce(description, '')) AS description
   FROM (
     SELECT
       uuid,
@@ -263,7 +263,7 @@ WITH
   FROM
      imp_step6
   WHERE
-    (cset_ai_org IS TRUE
+    (ai_company IS TRUE
       OR ai_category_cb IS TRUE)
     AND (target_country = "BRN"
       OR target_country = "MMR"
