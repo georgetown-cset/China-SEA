@@ -68,10 +68,6 @@ FROM (#Venture capital investment
       (category_groups_list LIKE '%Artificial Intelligence%',
         TRUE,
         FALSE) AS ai_category_cb,
-    IF
-      (CSET_id IS NOT NULL,
-        TRUE,
-        FALSE) AS cset_ai_org
     FROM
       comp
     LEFT JOIN (
@@ -186,7 +182,6 @@ FROM (#Venture capital investment
         0) AS ipo,
       IFNULL(ai_company,
         FALSE) AS ai_company,
-      cset_ai_org,
       ai_category_cb,
       IFNULL(investor_country,
         'missing') AS investor_country,
