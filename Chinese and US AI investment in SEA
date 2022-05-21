@@ -55,10 +55,6 @@ WITH
     (category_groups_list LIKE '%Artificial Intelligence%',
       TRUE,
       FALSE) AS ai_category_cb,
-  IF
-    (CSET_id IS NOT NULL,
-      TRUE,
-      FALSE) AS cset_ai_org
   FROM
     comp
   LEFT JOIN (
@@ -172,7 +168,6 @@ WITH
       0) AS ipo,
     IFNULL(ai_company,
       FALSE) AS ai_company,
-    cset_ai_org,
     ai_category_cb,
     IFNULL(investor_country,
       'missing') AS investor_country,
@@ -263,7 +258,7 @@ WITH
   FROM
      imp_step6
   WHERE
-    (cset_ai_org IS TRUE
+    (ai_company IS TRUE
       OR ai_category_cb IS TRUE)
       AND (investor_country = "USA"
       OR investor_country = "CHN"
