@@ -30,14 +30,28 @@ WITH
   comp AS ( # add CSET AI orgs
   SELECT
     *
-  FROM
-    comp_stage
+ comp_stage AS (
+  SELECT
+   * EXCEPT(short_description,
+      description),
+    CONCAT(coalesce(short_description, ''),' ', coalesce(description, '')) AS description
+  FROM (
+    SELECT
+      uuid,
+      name AS target_name,
+      cb_url,
+      country_code AS target_country,
+      short_description,
+      category_list,
+      category_groups_list
+    FROM
+      gcp_cset_crunchbase.organizations )
   LEFT JOIN (
     SELECT
-      CSET_id,
-      crunchbase.crunchbase_uuid AS uuid
+      uuid,
+      description
     FROM
-      high_resolution_entities.organizations )
+      gcp_cset_crunchbase.organization_descriptions)
   USING
     (uuid) ),
   add_ipo_tab AS (
@@ -57,12 +71,8 @@ WITH
     (category_groups_list LIKE '%Artificial Intelligence%',
       TRUE,
       FALSE) AS ai_category_cb,
-  IF
-    (CSET_id IS NOT NULL,
-      TRUE,
-      FALSE) AS cset_ai_org
   FROM
-    comp
+    comp_stage
   LEFT JOIN (
     SELECT
       1 AS ipo,
