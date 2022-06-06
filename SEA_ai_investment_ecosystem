@@ -9,7 +9,8 @@ SELECT
   string_agg (investor_country,
     "; ") AS investor_countries,
   target_country
-FROM (#Venture capital investment
+FROM (
+    #Venture capital investment
   WITH
     # table with basic company information
     comp_stage AS (
@@ -38,19 +39,6 @@ FROM (#Venture capital investment
         gcp_cset_crunchbase.organization_descriptions)
     USING
       (uuid) ),
-    comp AS ( # add CSET AI orgs
-    SELECT
-      *
-    FROM
-      comp_stage
-    LEFT JOIN (
-      SELECT
-        CSET_id,
-        crunchbase.crunchbase_uuid AS uuid
-      FROM
-        high_resolution_entities.organizations )
-    USING
-      (uuid) ),
     add_ipo_tab AS (
     SELECT
       uuid,
@@ -69,7 +57,7 @@ FROM (#Venture capital investment
         TRUE,
         FALSE) AS ai_category_cb,
     FROM
-      comp
+      comp_stage
     LEFT JOIN (
       SELECT
         1 AS ipo,
@@ -162,7 +150,7 @@ FROM (#Venture capital investment
       add_ipo_tab b
     ON
       a.target_uuid = b.uuid),
-    /* where ai_category_cb is True OR ai_company is True OR investment_from_ai_count > 0 OR investment_to_ai_count > 0*/ distinct_rounds AS (
+    /* where ai_category_cb is True OR ai_company is True */ distinct_rounds AS (
     SELECT
       DISTINCT target_uuid,
       funding_round,
