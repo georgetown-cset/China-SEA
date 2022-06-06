@@ -2,7 +2,7 @@ select
     country_code ,
     count(distinct uuid) as num_companies,
 from gcp_cset_crunchbase.organizations
-cross join unnest (category_list_split) as categories
+left join unnest (category_list_split) as categories
 --ai fx for keywords 
 where (cat_data.isAI(short_description) is true 
     or categories like '%Artificial Intelligence%')
