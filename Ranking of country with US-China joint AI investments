@@ -1,0 +1,38 @@
+select target_country, count (target_name) as target_name from 
+
+(WITH
+  a AS (
+  SELECT
+    *
+  FROM
+    `gcp-cset-projects.nl522_sandbox.usa_chn`),
+  b AS (
+  SELECT
+    *
+  FROM
+    `gcp-cset-projects.nl522_sandbox.usa_chn`)
+SELECT
+  a.investment_type,
+  a.target_name,
+  a.investor_name AS usa_investor_name,
+  b.investor_name AS chn_investor_name,
+  a.year,
+  a.imputed_investment_value,
+  b.imputed_investment_value,
+  a.investor_country AS usa_investor,
+  b.investor_country AS chn_investor,
+  a.target_country
+FROM
+  a
+LEFT JOIN
+  b
+ON
+  a.investment_type = b.investment_type
+  AND a.target_name = b.target_name
+  AND a.year = b.year
+  AND a.imputed_investment_value =  b.imputed_investment_value
+WHERE
+  a.investor_country = "USA"
+  AND b.investor_country = "CHN")
+  group by target_country
+  order by target_name desc
