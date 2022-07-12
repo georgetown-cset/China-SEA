@@ -1,5 +1,5 @@
-select target_country, count (target_name) as target_name from 
-
+select usa_target_country, count (usa_target_name) as target_name from (select distinct 
+usa_investment_type, usa_year, usa_value, usa_target_country, usa_target_name from
 (WITH
   a AS (
   SELECT
@@ -12,16 +12,20 @@ select target_country, count (target_name) as target_name from
   FROM
     `gcp-cset-projects.nl522_sandbox.usa_chn`)
 SELECT
-  a.investment_type,
-  a.target_name,
+  a.investment_type as usa_investment_type,
+  b.investment_type as chn_investment_type,
+  a.target_name as usa_target_name,
+  b.target_name as chn_target_name,
   a.investor_name AS usa_investor_name,
   b.investor_name AS chn_investor_name,
-  a.year,
-  a.imputed_investment_value,
-  b.imputed_investment_value,
+  a.year as usa_year,
+  b.year as chn_year,
+  a.imputed_investment_value as usa_value,
+  b.imputed_investment_value as chn_value,
   a.investor_country AS usa_investor,
   b.investor_country AS chn_investor,
-  a.target_country
+  a.target_country as usa_target_country,
+  b.target_country as chn_target_country
 FROM
   a
 LEFT JOIN
@@ -33,6 +37,6 @@ ON
   AND a.imputed_investment_value =  b.imputed_investment_value
 WHERE
   a.investor_country = "USA"
-  AND b.investor_country = "CHN")
-  group by target_country
+  AND b.investor_country = "CHN"))
+  group by usa_target_country
   order by target_name desc
