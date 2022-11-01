@@ -272,8 +272,7 @@ FROM (
         OR target_country = "PHL"
         OR target_country = "SGP"
         OR target_country = "THA"
-        OR target_country = "VNM"
-        OR target_country ="LKA")
+        OR target_country = "VNM")
       AND (year >= 2010)
       AND (year <= 2021)
       AND ( investment_type != "missing"
