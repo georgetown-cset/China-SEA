@@ -1,0 +1,1 @@
+This report examines the scope and nature of Chinese investment in Southeast Asian AI companies and analyzes a range of AI-related linkages between Chinese technology companies and Southeast Asian government and commercial actors over the past decade. Using ![image](https://user-images.githubusercontent.com/73554131/211653770-dfcb4972-bbc8-4b11-a3c9-6b87d6ec99e3.png)
